@@ -4,9 +4,9 @@ FROM sys.certificates
 WHERE name = 'MyTDECert';
 
 USE master;
-CREATE CERTIFICATE MyTDECert_with_longevity
-WITH SUBJECT = 'Certificate used for TDE in the TDE_Demo database for years to come',
-EXPIRY_DATE = '20251231';
+CREATE CERTIFICATE MyTDECert_new
+WITH SUBJECT = 'Rotate the certificate used for TDE in the TDE_Demo database',
+EXPIRY_DATE = '20301231';
 
 USE TDE_Demo;
 ALTER DATABASE ENCRYPTION KEY
