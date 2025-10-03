@@ -9,4 +9,6 @@ What sets this script apart?
 
 I'm sharing this version—created today in my local lab—to help others automate this essential task. Let me know what features you'd add!
 
-You can execute it by running: EXEC DBNAME.[dbo].[sp_monitor_disk_free_space] @Recipients = 'Email Goes here'
+You can execute it by running: 
+
+> EXEC DBNAME.[dbo].[sp_monitor_disk_free_space] @Recipients = 'Email Goes here'
