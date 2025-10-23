@@ -11,7 +11,11 @@ USE [master]
 GO
 -- Create the Database Mirroring / Always On communication endpoint
 -- Use port 5022 (common port for HADR endpoint) with AES encryption, required for security.
-CREATE ENDPOINT [Hadr_endpoint] AS TCP (LISTENER_PORT = 5022) FOR DATA_MIRRORING (ROLE = ALL, ENCRYPTION = REQUIRED ALGORITHM AES)
+
+IF NOT EXISTS (SELECT * FROM sys.endpoints WHERE name = 'Hadr_endpoint')
+BEGIN
+    CREATE ENDPOINT [Hadr_endpoint] AS TCP (LISTENER_PORT = 5022) FOR DATA_MIRRORING (ROLE = ALL, ENCRYPTION = REQUIRED ALGORITHM AES);
+END
 GO
 
 -- Ensure the endpoint state is STARTED
@@ -67,7 +71,10 @@ GO
 USE [master]
 GO
 -- Create the Database Mirroring / Always On communication endpoint (same configuration as AG1)
-CREATE ENDPOINT [Hadr_endpoint] AS TCP (LISTENER_PORT = 5022) FOR DATA_MIRRORING (ROLE = ALL, ENCRYPTION = REQUIRED ALGORITHM AES)
+IF NOT EXISTS (SELECT * FROM sys.endpoints WHERE name = 'Hadr_endpoint')
+BEGIN
+    CREATE ENDPOINT [Hadr_endpoint] AS TCP (LISTENER_PORT = 5022) FOR DATA_MIRRORING (ROLE = ALL, ENCRYPTION = REQUIRED ALGORITHM AES);
+END
 GO
 
 -- Ensure the endpoint state is STARTED
