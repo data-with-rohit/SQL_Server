@@ -9,4 +9,5 @@ Prerequisites
     The login running the script must have SA or high-level permissions on both AG1 and AG2.
     The Kerberos configuration (SPNs) must be correct to avoid SSPI errors during the :Connect steps.
 
+Key Features and Actions which this script helps you with. This is best suited for someone who is trying to quickly create an AG group for testing. This can very well be used in PROD after making necessary changes. (Please test properly and make necesarry changes before running it in PROD).
 <img width="1244" height="342" alt="image" src="https://github.com/user-attachments/assets/b11e4341-45fb-4246-86a7-ae2a73ac5e12" />
