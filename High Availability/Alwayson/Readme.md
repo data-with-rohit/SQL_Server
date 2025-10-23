@@ -1,6 +1,7 @@
 Always On Availability Group Setup Script :: This script is best suited for someone who is trying to quickly create an AG group for testing. This can very well be used in PROD after making necessary changes. (Please test properly and make necesarry changes before running it in PROD).
 
 This T-SQL script is designed to be run in SQLCMD mode, automates the critical prerequisites and final creation steps for a two-replica Always On Availability Group named [TestNew_AG] spanning two SQL Server instances, AG1 and AG2.
+This also automates creating the DB to instance default data and log file location. Backup is also taken to default backup location.
 
 Prerequisites
 
