@@ -126,6 +126,10 @@ GO
 -- Connect back to the first replica (which will be the initial primary)
 :Connect AG1
 
+--Enables compression of the data stream for availability groups during automatic seeding. During automatic seeding, compression can significantly reduce the transfer time, and increase the load on the processor.
+    --For more info: https://learn.microsoft.com/en-us/sql/database-engine/availability-groups/windows/tune-compression-for-availability-group?view=sql-server-ver17#trace-flags-for-availability-group-compression
+DBCC TRACEON (9567, -1);
+GO
 -- Declare variables for dynamic database creation
 DECLARE @DataPath nvarchar(512);
 DECLARE @LogPath nvarchar(512);
