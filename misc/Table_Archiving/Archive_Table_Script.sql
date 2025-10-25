@@ -19,7 +19,7 @@ DECLARE @BatchSize INT = 500; -- rows per delete batch
 DECLARE @DateThreshold DATE = '2020-06-01'; -- Archive records where [StartDate] is OLDER than this date
 
 -- Specify your Archive Table name and database here.
--- NOTE: The target table (FCaps_HR_Attendance_Archive) MUST have the same columns as the source.
+-- NOTE: The target table (HR_Attendance_Archive) MUST have the same columns as the source.
 DECLARE @ArchiveTable SYSNAME = N'TSQLDemoDB.dbo.HR_Attendance_Archive';
 
 ----------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ BEGIN
 END
 
 PRINT '==================================================';
-PRINT 'Archive of FCaps_HR_Attendance completed successfully!';
+PRINT 'Archive of HR_Attendance completed successfully!';
 PRINT '==================================================';
 
 -- Clean up temp tables
