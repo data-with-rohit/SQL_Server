@@ -20,7 +20,7 @@ DECLARE @DateThreshold DATE = '2020-06-01'; -- Archive records where [StartDate]
 
 -- Specify your Archive Table name and database here.
 -- NOTE: The target table (FCaps_HR_Attendance_Archive) MUST have the same columns as the source.
-DECLARE @ArchiveTable SYSNAME = N'TSQLDemoDB.dbo.FCaps_HR_Attendance_Archive';
+DECLARE @ArchiveTable SYSNAME = N'TSQLDemoDB.dbo.HR_Attendance_Archive';
 
 ----------------------------------------------------------------------------------------------------
 -- TEMP TABLES TO HOLD LOOPING KEYS
@@ -49,7 +49,7 @@ CREATE TABLE #DeleteDates
 ----------------------------------------------------------------------------------------------------
 
 INSERT INTO #DeleteEmployees (EmployeeNumber)
-SELECT DISTINCT EmployeeNumber FROM dbo.FCaps_HR_Attendance WITH (NOLOCK)
+SELECT DISTINCT EmployeeNumber FROM dbo.HR_Attendance WITH (NOLOCK)
 WHERE StartDate < @DateThreshold ORDER BY EmployeeNumber;
 
 ----------------------------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ BEGIN
     TRUNCATE TABLE #DeleteDates;
 
     INSERT INTO #DeleteDates (StartDate)
-    SELECT DISTINCT StartDate FROM dbo.FCaps_HR_Attendance WITH (NOLOCK)
+    SELECT DISTINCT StartDate FROM dbo.HR_Attendance WITH (NOLOCK)
     WHERE EmployeeNumber = @CurrentEmployeeNumber AND StartDate < @DateThreshold ORDER BY StartDate;
 
     ----------------------------------------------------------------
@@ -105,10 +105,10 @@ BEGIN
         WHILE @RowsDeleted > 0
         BEGIN
             -- Archive/Delete based on EmployeeNumber and StartDate (the first two parts of the PK)
-            DELETE TOP (@BatchSize) FROM dbo.FCaps_HR_Attendance
+            DELETE TOP (@BatchSize) FROM dbo.HR_Attendance
             
             -- Use OUTPUT INTO to simultaneously archive the data
-            OUTPUT deleted.* INTO TSQLDemoDB.dbo.FCaps_HR_Attendance_Archive
+            OUTPUT deleted.* INTO TSQLDemoDB.dbo.HR_Attendance_Archive
             
             WHERE EmployeeNumber = @CurrentEmployeeNumber
               AND StartDate = @CurrentStartDate;
