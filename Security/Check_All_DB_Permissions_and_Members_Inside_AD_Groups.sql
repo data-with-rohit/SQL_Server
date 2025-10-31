@@ -1,7 +1,3 @@
-/*
-This script will give you all permissions assiged to any AD group and all members from all AD groups.
-*/
-
 -- Drop temp tables if they already exist
 IF OBJECT_ID('tempdb..#Principals') IS NOT NULL DROP TABLE #Principals;
 IF OBJECT_ID('tempdb..#RoleLinks') IS NOT NULL DROP TABLE #RoleLinks;
@@ -177,16 +173,18 @@ BEGIN
         INSERT INTO #ADMembers
         SELECT @PrincipalName, [account name], [type], [privilege], [mapped login name], [permission path]
         FROM #xp_results;
-        END TRY
-        BEGIN CATCH
-    END CATCH;
+      END TRY
         
-
+        BEGIN CATCH
+        END CATCH;
     FETCH NEXT FROM ad_cur INTO @PrincipalName;
 END;
 
 CLOSE ad_cur;
 DEALLOCATE ad_cur;
+
+
+
 
 CREATE TABLE #FinalResult
 (
@@ -224,7 +222,7 @@ INSERT INTO #FinalResult
 SELECT
     p.PrincipalName,
     p.PrincipalType,
-    adm.ADGroup,      
+    p.PrincipalName,      
     adm.ContainedADUser,
     NULL,             
     dp.PermissionLevel,
@@ -234,15 +232,14 @@ SELECT
     dp.ObjectType
 FROM #Principals p
 JOIN #ADMembers adm ON p.PrincipalName = adm.ADGroup
-JOIN #DirectPermissions dp ON dp.PrincipalName = adm.ContainedADUser
+JOIN #DirectPermissions dp ON dp.PrincipalName = adm.ADGroup
 WHERE NOT (dp.PermissionLevel='DATABASE' AND dp.PermissionType='CONNECT'); 
-
 
 INSERT INTO #FinalResult
 SELECT
     p.PrincipalName,
     p.PrincipalType,
-    COALESCE(adm.ADGroup, p.PrincipalName) AS ADGroupOrLogin,
+    p.PrincipalName,
     adm.ContainedADUser,
     rl.DBRole,
     rp.PermissionLevel,
@@ -252,7 +249,7 @@ SELECT
     rp.ObjectType
 FROM #Principals p
 LEFT JOIN #ADMembers adm ON p.PrincipalName = adm.ADGroup 
-LEFT JOIN #RoleLinks rl ON rl.PrincipalName = p.PrincipalName OR rl.PrincipalName = adm.ContainedADUser 
+LEFT JOIN #RoleLinks rl ON rl.PrincipalName = p.PrincipalName 
 JOIN #RolePermissions rp ON rl.DBRole = rp.DBRole
 WHERE NOT (rp.PermissionLevel='DATABASE' AND rp.PermissionType='CONNECT'); 
 
@@ -260,7 +257,6 @@ WHERE NOT (rp.PermissionLevel='DATABASE' AND rp.PermissionType='CONNECT');
 SELECT
     PrincipalName,
     PrincipalType,
-    ADGroupOrLogin,
     ContainedADUser,
     DBRole,
     PermissionLevel,
@@ -270,3 +266,4 @@ SELECT
     ObjectType
 FROM #FinalResult
 ORDER BY PrincipalName, ContainedADUser, DBRole, ObjectName;
+
